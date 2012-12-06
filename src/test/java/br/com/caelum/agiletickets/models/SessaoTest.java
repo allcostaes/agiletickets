@@ -33,7 +33,7 @@ public class SessaoTest {
 	}
 	
 	@Test
-	public void reservar1IngresseQuandoHa1Ingresso() throws Exception {
+	public void reservarNIngressosQuandoHaNIngressos() throws Exception {
 		Sessao sessao = new Sessao();
         sessao.setTotalIngressos(1);
 

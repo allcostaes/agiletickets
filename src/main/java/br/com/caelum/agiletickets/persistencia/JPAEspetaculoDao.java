@@ -16,7 +16,8 @@ public class JPAEspetaculoDao implements Agenda {
 	private final EntityManager manager;
 	private final Relogio relogio;
 
-	public JPAEspetaculoDao(EntityManager manager, Relogio relogio) {
+	public JPAEspetaculoDao(EntityManager manager, Relogio relogio) 
+	{
 		this.manager = manager;
 		this.relogio = relogio;
 	}
