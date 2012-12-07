@@ -29,7 +29,6 @@ public class EspetaculosController {
 	private Validator validator;
 	private Result result;
 
-
 	private final DiretorioDeEstabelecimentos estabelecimentos;
 
 	public EspetaculosController(Agenda agenda, DiretorioDeEstabelecimentos estabelecimentos, Validator validator, Result result) {
@@ -65,6 +64,7 @@ public class EspetaculosController {
 		if (Strings.isNullOrEmpty(espetaculo.getDescricao())) {
 			validator.add(new ValidationMessage("Descricao do espetaculo nao pode estar em branco", ""));
 		}
+		validator.onErrorRedirectTo(this).lista();
 	}
 
 
@@ -85,16 +85,23 @@ public class EspetaculosController {
 			result.notFound();
 			return;
 		}
-
-		validaQdeReserva(quantidade, sessao);
-
-		// em caso de erro, redireciona para a lista de sessao
-		validator.onErrorRedirectTo(this).sessao(sessao.getId());
-
+		validaSessao(quantidade, sessao);
 		sessao.reserva(quantidade);
 		result.include("message", "Sessao reservada com sucesso");
 
 		result.redirectTo(IndexController.class).index();
+	}
+
+	private void validaSessao(final Integer quantidade, Sessao sessao) {
+		if (quantidade < 1) {
+			validator.add(new ValidationMessage("Voce deve escolher um lugar ou mais", ""));
+		}
+
+		if (!sessao.podeReservar(quantidade)) {
+			validator.add(new ValidationMessage("Nao existem ingressos dispon√≠veis", ""));
+		}
+		// em caso de erro, redireciona para a lista de sessao
+		validator.onErrorRedirectTo(this).sessao(sessao.getId());
 	}
 
 	private void validaQdeReserva(final Integer quantidade, Sessao sessao) {
@@ -137,6 +144,4 @@ public class EspetaculosController {
 		validator.onErrorUse(status()).notFound();
 		return espetaculo;
 	}
-
-	
 }

@@ -45,5 +45,4 @@ public class EstabelecimentosController {
 		result.redirectTo(this).lista();
 	}
 
-
 }
